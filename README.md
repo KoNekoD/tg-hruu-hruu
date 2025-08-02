@@ -1,21 +1,21 @@
-# hruu-hruu script - A program that calls people and ~grunts~ rickrolls them
-# Программа которая звонит людям и ~хрюкает~ рикрлллит их
+# TG-HRUU-HRUU / ТГ-ХРЮ-ХРЮ
 
-## How to run?
+A program that calls people and ~grunts~ rickrolls them / Программа которая звонит людям и ~хрюкает~ рикрлллит их
 
-1. Install dependencies
-```
-make python_install
+## Configuration
+
+1. Copy `.env.dist` to `.env`
+2. Generate `APP_ID` and `APP_HASH` from [my.telegram.org](https://my.telegram.org)
+3. Set `API_ID` and `API_HASH` in `.env`
+
+## Setup
+
+```shell
+ make python_install
 ```
 
-2. Activate venv
-```
-source venv/bin/activate
-```
+## Usage
 
-3. Copy .env.dist to .env and set APP_ID and APP_HASH variables
-
-3. Run
-```
-python main.py --target-username username123
+```shell
+.venv/bin/python main.py --target-username username123
 ```
