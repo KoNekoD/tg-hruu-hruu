@@ -1,10 +1,13 @@
 import argparse
+import asyncio
 import os
+import time
 
 from dotenv import load_dotenv
 from pyrogram import Client, idle
 from pyrogram.errors import UserPrivacyRestricted
 from pytgcalls import PyTgCalls
+from pytgcalls.exceptions import CallDeclined, NotInCallError
 from pytgcalls.types import MediaStream
 
 load_dotenv()
@@ -19,14 +22,26 @@ if __name__ == '__main__':
 
     app = Client('py-tgcalls', api_id=api_id, api_hash=api_hash)
 
-    stream_path = 'media/Deutsch.mp4'  # or another mp4/mp3 file
+    stream_path = 'media/vid.mp4'  # or another mp4/mp3 file
 
     call_py = PyTgCalls(app)
     call_py.start()
+
     try:
         call_py.play(args.target_username, MediaStream(stream_path))
     except UserPrivacyRestricted:
         print('User privacy restricted')
         exit()
+    except CallDeclined:
+        print('Call declined')
+        exit()
 
-    idle()
+    while True:
+        time.sleep(10)
+
+        try:
+            t = call_py.time(args.target_username)
+            print(f'Call time: {t}')
+        except NotInCallError:
+            print('Not in call')
+            break
