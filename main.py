@@ -4,11 +4,12 @@ import os
 import time
 
 from dotenv import load_dotenv
+from ntgcalls import ConnectionNotFound
 from pyrogram import Client, idle
 from pyrogram.errors import UserPrivacyRestricted
 from pytgcalls import PyTgCalls
-from pytgcalls.exceptions import CallDeclined, NotInCallError
-from pytgcalls.types import MediaStream
+from pytgcalls.exceptions import CallDeclined, NotInCallError, CallBusy, NoActiveGroupCall
+from pytgcalls.types import MediaStream, StreamEnded
 
 load_dotenv()
 
@@ -22,9 +23,15 @@ if __name__ == '__main__':
 
     app = Client('py-tgcalls', api_id=api_id, api_hash=api_hash)
 
-    stream_path = 'media/vid.mp4'  # or another mp4/mp3 file
+    stream_path = 'media/buckshot.mp4'  # or another mp4/mp3 file
 
     call_py = PyTgCalls(app)
+
+    def handle_event(client: PyTgCalls, update):
+        if isinstance(update, StreamEnded):
+            exit()
+    call_py.add_handler(handle_event)
+
     call_py.start()
 
     try:
@@ -34,6 +41,9 @@ if __name__ == '__main__':
         exit()
     except CallDeclined:
         print('Call declined')
+        exit()
+    except CallBusy:
+        print('Call busy')
         exit()
 
     while True:
